@@ -1,0 +1,16 @@
+{
+	"family": "ecsrepo",
+	"containerDefinitions": [{
+		"name": "ecsrepo",
+		"image": "371797496266.dkr.ecr.us-east-1.amazonaws.com/ecsrepo",
+		"cpu": 100,
+		"portMappings": [{
+			"protocol": "tcp",
+			"containerPort": 8000,
+			"hostPort": 80
+		}],
+		"memory": 128,
+		"essential": true
+	}]
+
+}
