@@ -1,0 +1,94 @@
+Created a codecommit repo "helloworld"
+
+Add, commit and push files "Dockerfile,buildspec.yml,index.html" from local to "helloworld" codecommit repo
+
+created a ECR repo "helloworld-ecr-repo"
+
+create a "helloworld-build" peoject on code build.
+
+        This project creates an IAM service role "codebuild-helloworld-build-service-role" to push built docker images with ECR repo.
+
+        Configure s3 artifacts details - select the bucketname and the specify the name to send the artifacts.
+                In this case I have selected the s3 bucket as "ecs-artifacts" and given the Name as "helloworld-project"
+        Add Environment variables for the parameters mentioned in buildspec.yml file. In this case I have added the below parameters and value:
+
+            AWS_ACCOUNT_ID          371797496266
+            ECR_REPO_AWS_REGION     us-east-1
+            ECR_REPO_NAME           helloworld-ecr-repo
+
+        Now select save and build. In this case the build fails as the code build service role doesnt have the permissions to push the docker image to ecr.
+        Go to IAM role ""codebuild-helloworld-build-service-role" and add "AmazonEC2ContainerRegistryPowerUser" policy to this role.
+
+        Now start bulding the project and after the completion of build, you will see the docker image is pushed to ecr repo "helloworld-ecr-repo" with latest tag 
+        and the imagedefinitions.json file is pushed to s3 bucket path "ecs-artifacts/helloworld-project/"
+
+
+
+Open ECR:
+
+Create an ecr cluster 
+
+    Name: helloworld-cluster
+    no of instances: 2 (which launches 2 ec2 instances)
+    Select the subnets to launch and security groups.
+    Select the instance role. In this case i chose "ecsInstanceRole" which assumes:
+        AWS manage policy "AmazonEC2ContainerServiceforEC2Role"
+        AWS Managed policy "S3 readonly access"  &
+        inline policy "ecs-start-task" are attached
+
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "VisualEditor0",
+                            "Effect": "Allow",
+                            "Action": "ecs:StartTask",
+                            "Resource": "*"
+                        }
+                    ]
+                }
+
+    Click on create cluster.
+
+    After creation, you see all values as zero and the container instances as 2 (which means two empty ec2 instances are running with no containers)
+
+Under task definitions:
+
+    Create task 
+    task name : helloworld-task
+    task execution role:  select "ecsTaskExecutionRole" assumes the AWS managed policy "AmazonECSTaskExecutionRolePolicy" is attached to it.
+    network mode: default
+    task size:
+        task memory: 256
+        task cpu: 512
+    Add volumes if required
+    ADD Containers:
+        container name: helloworld
+        image: docker image with latest tag, in this case "371797496266.dkr.ecr.us-east-1.amazonaws.com/helloworld-ecr-repo:latest"
+        portmappings: Remember this docker containers runs on port 80 as it is exposed in "Dockerfile".
+                     So i choose host: 80, container port: 80
+        Fill the additional details if required and save.
+        Now you see the task status as ACTIVE.
+        
+Now create a service to run this task and deploy the docker containers.
+
+    go to testcluster
+    select services tab and create service
+    launch type: ec2
+    task definition:  helloworl-task
+    give the service name: helloworld-service
+    set number of tasks: 1
+    Create a service
+
+Now on cluster UI, you will observe
+
+        container instances: 2 ( which means 2 ec2 instances are running)
+        service: 1
+        running tasks: 1 (which means 1 dicker container is running)
+
+        But we dont know in which ec2 the docker container is running.
+
+        On the testcluster, go to ECS instances tab and check in which instance, the task is running.
+
+        Login in to that ec2.
+        
