@@ -1,0 +1,17 @@
+For codebuild
+  IAM policy - AmazonEC2ContainerRegistryPowerUser
+
+For ECSInstancerole
+IAM policies - AmazonEC2ContainerServiceforEC2Role
+               S3 readonly access
+               ecs-start-task - Inline policy
+
+For Taskdefinition ececution role
+IAM policies - AmazonECSTaskExecutionRolePolicy
+               
+ 
+ 
+  
+  
+  
+  
