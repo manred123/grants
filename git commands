@@ -1,0 +1,179 @@
+
+Copy the files to one server1 to other server2
+1) using FTP
+2) scp -R user@server1id server1path server2path (in server2 this has to do)
+
+
+git help
+git clone <url> [download or clone your repository from github]
+git remote add origin <url> like clone
+git init [to create your local repository]
+git config --global user.name "username"
+git config --global user.email "email"
+git config --list
+
+git add / git commit -a
+git add . [ to add all untracked files to index area]
+git add -A / git add --all	
+git add -u [ to add tracked files and ignore untracked files ]
+
+git commit -m [ 40char sha code generates ]
+git commit -a -m [ committing all files at once]
+git commit --amend -m " message " [ this can edit the latest comit message ]
+git commit --amend [ it opens the vi editor to edit message ]
+
+git cherry-pick <shacode> [ it picks commit from master to feature branch , shacode from master commit ]
+
+git push origin master (origin is the connection string between local and remote repository)
+git pull origin master (other user to work on your file)
+
+git status [which files are added to index and are ready to commit] it shows the file not content 
+
+git remote -v
+git remote add origin <url> [if u didn't clone git url initially]
+git clean -f  [ To delete untracked files/ without add/commit files ]
+git clean -df [ same as above ]
+
+git init --bare --shared   [create cental repository in local system/repository]
+git push [central path ] [branch name(master)]
+
+git diff [ changes between workpace and staging area ] and can see the changes/content in file
+git diff HEAD [ changes between worksapce and local repository ]
+git difftool <oldcommitshacode> <newcommitshacode> [ to show difference between two commits ]
+git difftool HEAD~1 HEAD~2 [ difference between lastbutone commit and next commit ]
+
+
+[[[[[[[[commit 6917b84588ea228328f09956a2dca2679f7c4a1a (HEAD -> master)
+Author: manohar <manohar.karakondu@gmail.com>
+Date:   Mon Aug 14 23:00:27 2017 +0530
+
+    Revert "latest"
+
+commit c1d7267e5f92deae5d7f3de63d850a7e3abb2537  ---HEAD~1
+Author: manohar <manohar.karakondu@gmail.com>
+Date:   Mon Aug 14 22:59:51 2017 +0530
+
+    latest
+
+commit 7b398469de7490e89b084d4431dc1ea7f3355edd  -----HEAD~2
+Author: manohar <manohar.karakondu@gmail.com>
+Date:   Mon Aug 14 22:25:02 2017 +0530
+
+    s1 updated
+]]]]]]]]]]]]
+
+
+git .gitignore [ *.exe , *.zip, *.jar etc ] can igore the files if you want , just add that files in .gitignore file
+
+git rm -rf [ to remove files/folders from local repo]
+
+
+For uncommited changes / added files 
+git checkout -- filename [to undochanges in file ]
+git checkout -- . [ to undo mutliple files ]
+
+For Committed changes
+git revert <Shacode> [ to undo changes in file ]
+git revert -n <shacode>
+
+git reset file [ to reset the files that are in staging area ]
+git reset --soft <shacode> [ to reset commit, and this change existed in staging area/working copy , the status of files are added and ready for commit / green status ]
+git reset <shacode> [ Unstaged changes after reset means , the status of files are not added and need to be added / red status ]
+git reset --hard <shacode> [ Head is now at initial commit (shacode) and it shows the untracked files in red status that should need to add ]
+
+git show HEAD / git show <shacode> [ to show latest commit ]
+git log
+
+git log -n 5
+
+git log --oneline
+git log --stat [ to check the log and difference in commits ]
+git log --graph --all --oneline
+
+git reflog [ shows your all commits even from feature branches , it shows all the updates/resets that were made ]
+
+git rebase [to make a linear sequence of commits]
+git merge 
+
+git merge <branch> [to add branch to master]
+
+git merge origin/master
+git fetch - changes from remote respository only adds to your local repository
+git pull - changes from remote repo adds to your working directory
+git pull = git fetch + git merge
+
+git branch
+git branch <new branchname>
+git branch -d <branchname> [delete branch within working dir]
+git branch -d <b1 b2 b3 b4 b5> {to delete mutliple branches}
+git branch -a <listing the branches remote and local repo>
+git branch --merged [ to check the merged branches ]
+
+git push origin --delete <branch name> [ to delete branch from remote repo]
+
+git checkout <branchname>
+git checkout -b <branch name > [Directly switch to new branch]
+
+git checkout 802d31b4 <file >  [If you want to revert/roll back the changes/commit, take commit first 8 digits of sha code]
+
+git stash save " message ' [ if any differences/changes to commit , we can put aside by saving ] [ before commit you have to do stash ]
+git stash list [ to list ]
+git stash apply stash@{0} [ to revert the hold changes ]
+git stash pop [ to revert the latest hold change  ]
+git stash drop stash@{0} [ to drop/remove the changes completely] 
+git stash clear [ to remove all the stash list ]
+
+Please commit your changes or stash them before you switch branches.
+
+git tag -- to mark release points for your code/data, to create historic restore points
+When you want to create a release point for a stable version of your code
+
+git tag <v1.0>
+git tag -a v1.1 -m "ver 1 of v1.0" [annotated tag] [adding tag ]
+git tag -l "v1.*" [display all the tags]
+
+git push origin v1.0
+git push origin --tags
+git push --tags [to push all tags to remote repository]
+
+git tag -d v1.0
+git tag --delete v1.0
+
+git push origin -d v1.0
+git push origin --delete v1.0 [ to delete tags in remote repository ]
+
+git tag v1.2 <shacode> [ to create a tag for past commit ]
+
+git rebase -i HEAD~n
+
+Using git hooks, we can create and run shellscript files with in working copy
+
+SSH -KEYGEN [ goto github account settings,give the SSH key ]
+ssh -T git@github.com [ 
+
+sudo adduser <username>
+sudo passwd <username>
+
+Maven use POM.XML - project object model . external markup language [it can understand any language]
+Ant use BUILD.XML
+ 
+
+
+Local _ws credentials:
+
+to reset passowrd in linux
+go to root, mount -o remount,rw /
+now type passwd ubuntu(user)
+
+
+EC2
+
+to see if any remote exists - git remote -v
+if the remote is not available-     git remote add <linkname> <url until the repository name>
+
+to create branches
+
+git branch dev
+
+
+git checkout dev
