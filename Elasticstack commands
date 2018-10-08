@@ -30,6 +30,9 @@ o Sudo sestatus
 o Sudo vim /etc/selinux/config
 o Set sestatus=disabled
 o And then reboot the system: sudo reboot
+wget https://download.elastic.co/logstash/logstash/packages/centos/logstash-1.5.4-1.noarch.rpm
+yum install logstash-1.5.4-1.noarch.rpm -y
+rm -f logstash-1.5.4-1.noarch.rpm
  Install Logstash
 o Sudo yum install logstash
  Before starting the service, fix some configurations:
