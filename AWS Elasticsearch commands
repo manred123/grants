@@ -1,0 +1,74 @@
+Elasticsearch is an open-source search engine which can be installed manually on your node or you can create a domain on the cloud by using AWS Elasticsearch, below are basic Elasticsearch commands which you can run from any Linux server which has an open access to the Elasticsearch node:
+
+#1 Check your Elasticsearch cluster health: (replace below bold/colored Elasticsearch node with your AWS node or localhost if you are running it from your direct installed instance)
+
+_cat/health?v -- This parameter which used to inquiry the health of the node.
+
+curl 'search-dotsways-fwtnmygdotwtsy2wvmumradkqa.us-east-1.es.amazonaws.com/_cat/health?v'
+Sample output:
+
+epoch timestamp cluster status node.total node.data shards pri relo init unassign pending_tasks max_task_wait_time active_shards_percent
+1492895570 14:12:50 513643930529:dotsways green 2 2 42 21 0 0 0 0 -- 100.0%
+#2 List AWS Elasticsearch nodes
+
+_cat/nodes?v -- Is used to list the Elasticsearch nodes
+
+curl  'replace-with-your-node-name/_cat/nodes?v'
+Sample output:
+
+ip heap.percent ram.percent cpu load_1m load_5m load_15m node.role master name
+x.x.x.x 14 98 2 0.03 0.10 0.13 mdi -- bcqocrw
+x.x.x.x 14 97 2 0.06 0.11 0.11 mdi * WDBCOid
+ 
+
+#3 Create new index
+
+ /usersz/external/1 -- Usersz is the name of the new index we want to create.
+?pretty -- Is used to have a clean output in separate likes.
+
+Then i am passing a JSON format which has a name of dotsway and a type of website.
+
+curl -XPUT  'replace-with-your-node-name/usersz/external/1?pretty' -d
+'{
+"name": "Dotsway",
+"type":"website"
+}'
+Sample output:
+
+{
+"_index" : "usersz",
+"_type" : "external",
+"_id" : "1",
+"_version" : 1,
+"result" : "created",
+"_shards" : {
+"total" : 2,
+"successful" : 1,
+"failed" : 0
+},
+"created" : true
+}
+ 
+
+#4 List indices 
+
+/_cat/indices?v -- Is used to list the Elasticsearch indices
+
+curl  'replace-with-your-node-name/_cat/indices?v'
+Sample output:
+
+health status index uuid pri rep docs.count docs.deleted store.size pri.store.size
+green open example exXUF8zyR1WLMEAY5Lw5SA 5 1 0 0 1.2kb 650b
+green open usersz -xrwTiJMQGSRsOJY98V8Hg 5 1 1 0 7.7kb 3.8kb
+green open .kibana _dUmh9oJTA2comS1Jjxg-g 1 1 1 0 6.3kb 3.1kb
+green open customer yHPoC0-rRaKeHtHKi18OQQ 5 1 1 0 7.7kb 3.8kb
+green open example2 Nh62hsm3TwC3qWDMZJHlvw 5 1 0 0 1.2kb 650b
+ 
+
+#5 Retrieving:
+
+curl -XGET 'replace-with-your-node-name/customer/external/1?pretty'
+7. Delete an index:
+
+curl -XDELETE 'replace-with-your-node-name/customer?pretty'
+Those are the basic AWS Elasticsearch commands which can get you started and test the service.
