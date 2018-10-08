@@ -1,0 +1,69 @@
+
+mahendranadha reddy
+7:03 AM (47 minutes ago)
+to me
+
+Shipper Configurations::
+input {
+    file {
+        type => "syslog"
+        path => ["/var/log/secure", "/var/log/messages", "/var/log/audit/audit.log"]
+        exclude => ["*.gz"]
+    }
+    file {
+        type => "application1"
+        path => "/var/log/application1.log"
+        exclude => ["*.gz"]
+    }    
+        #Merge lines with previous if not start with timestamp
+        codec => multiline {
+            patterns_dir => "/etc/logstash/patterns"
+            pattern => '^%{YEAR_LEADING_TIMESTAMP_US}|^%{TIMESTAMP_LOG4J}'
+            negate => true
+            what => previous
+        }
+}
+filter {
+add some filters here
+}
+
+output {
+       rabbitmq {
+           host => "IP"
+           exchange => "amq.fanout"
+           exchange_type => "fanout"
+           key => "logstash"
+           user => "username"
+           password => "password"
+       }
+}
+
+
+
+Parser Configurations:
+
+input {
+  rabbitmq {
+       host => "fqdn or IP"
+       user => "consumer"
+       password => "password"
+       queue => "pvdcco"
+       key => "logstash"
+       durable => "true"
+       ack => "true"
+       prefetch_count => 500
+       threads => 8
+       auto_delete => "false"
+  }
+}
+
+output {
+ if [type] in [ "type1", "type2"] {
+    elasticsearch {
+        template_overwrite => true
+        hosts => ["IP1", "IP2"
+        template => "/etc/logstash/templates/template-default.json"
+        index => "indexname-%{+YYYY.MM.dd}"
+     }
+ }
+}
