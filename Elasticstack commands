@@ -1,0 +1,71 @@
+Installing Elasticsearch on an instance separately:
+ Java is a pre-requisite for ES. So, verify and install Java:
+o Sudo Yum install java
+ Ensure SELinux is disabled
+o Sudo sestatus
+ If not disabled, disable it
+o Sudo vim /etc/selinux/config
+o Set sestatus=disabled
+o And then reboot the system: sudo reboot
+ Install Elasticsearch
+o Sudo yum install elasticsearch
+ Before starting the service, fix some configurations:
+o In elasticsearch.yml:
+ Set cluster name
+ Set node name (fqdn or something)
+ Set bootstrap_memory_lock to true
+o In jvm.options:
+ Set the heap memory to half of the node memory: Eg: -xms2g –xmx2g if the
+memory is 4gb
+
+ Start the service:
+o Sudo systemctl start elasticsearch
+
+Installing Logstash Shipper:
+ Java is a pre-requisite for ES. So, verify and install Java:
+o Sudo Yum install java
+ Ensure SELinux is disabled
+o Sudo sestatus
+ If not disabled, disable it
+o Sudo vim /etc/selinux/config
+o Set sestatus=disabled
+o And then reboot the system: sudo reboot
+ Install Logstash
+o Sudo yum install logstash
+ Before starting the service, fix some configurations:
+o In logstash.yml:
+ Set node name (fqdn or something)
+o Create a logstash.conf file in /etc/logstash/conf.d/ directory:
+ Vi /etc/logstash/conf.d/logstash.conf
+ Add input and output configurations
+ In the inputs add the files from which the logs have to be shipped
+ In the outputs add the redis configurations
+ Save the file
+
+ Start the service:
+o Sudo systemctl start logstash
+
+Installing Logstash Parser:
+ Java is a pre-requisite for ES. So, verify and install Java:
+o Sudo Yum install java
+ Ensure SELinux is disabled
+o Sudo sestatus
+ If not disabled, disable it
+o Sudo vim /etc/selinux/config
+o Set sestatus=disabled
+o And then reboot the system: sudo reboot
+ Install Logstash
+o Sudo yum install logstash
+ Before starting the service, fix some configurations:
+o In logstash.yml:
+ Set node name (fqdn or something)
+o Create a logstash.conf file in /etc/logstash/conf.d/ directory:
+ Vi /etc/logstash/conf.d/logstash.conf
+ Add input and output configurations
+ In the inputs add the redis configurations
+ In the outputs add the elasticsearch configurations
+ You can add filters optionally, to treat your raw files and process them.
+ Save the file
+
+ Start the service:
+o Sudo systemctl start logstash
