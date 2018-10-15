@@ -1,0 +1,68 @@
+provider "aws" {
+  region = "ap-south-1"
+}
+
+#EC2
+resource "aws_instance" "First_EC2" {
+  ami           = "${var.ami}"
+  instance_type = "${var.instype}"
+  tags {
+    Name = "Ec2one"
+  }
+}
+
+#VPC
+resource "aws_vpc" "vpc_new" {
+  cidr_block       = "${var.vpc_cidr}"
+  instance_tenancy = "${var.vpc_tenancy}"
+
+  tags {
+    Name  = "vpc_new"
+    Batch = "NEW"
+  }
+}
+
+# Subnets
+resource "aws_subnet" "Subnets_new" {
+  count                   = "${var.subnets_count}"
+  vpc_id                  = "${aws_vpc.vpc_new.id}"
+  cidr_block              = "${var.cidr_subnet[count.index]}"
+  availability_zone       = "${data.aws_availability_zones.azs.names[count.index]}"
+  map_public_ip_on_launch = true
+
+  tags {
+    Name = "Subnet1-${count.index + 1}"
+  }
+}
+
+Variables:
+# Variable for EC2
+variable "ami" {
+  default = "ami-5b673c34"
+}
+
+variable "instype" {
+  default = "t2.micro"
+}
+
+# Variable for VPC
+variable "vpc_cidr" {
+  default = "192.50.0.0/16"
+}
+
+variable "vpc_tenancy" {
+  default = "default"
+}
+
+# Variables for public subnets
+variable "cidr_subnet" {
+  type    = "list"
+  default = ["192.50.1.0/24", "192.50.2.0/24"]
+}
+
+# Declare the data source
+data "aws_availability_zones" "azs" {}
+
+variable "subnets_count" {
+  default = "2"
+}
