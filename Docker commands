@@ -1,0 +1,137 @@
+1. Docker installation commands:
+   I. on ubuntu
+	a. sudo apt-get update
+	b. sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+	c. sudo apt-add-repository 'deb https://apt.dockerproject.org/repo ubuntu-xenial main'
+	d. sudo apt-get update , apt install docker, apt install docker-engine
+	f. sudo usermod -aG docker ec2-user: to add an user to the docker group so that you will not be required use sudo
+        g. sudo apt install docker.io
+        h. sudo systemctl status docker / service docker status
+   II. on AMI
+	a. sudo yum install -y docker
+check docker service status active or not
+2. Create a folder in the name of the application for which you would like to use the container
+3. next cd to that folder
+4. vi Dockerfile and enter the input as:
+	FROM tomcat:8.0.20-jre8
+	MAINTAINER manohar <manohar.karakondu@gmail.com>
+	COPY tomcat-users.xml /usr/local/tomcat/conf/
+	COPY grants.war /usr/local/tomcat/
+	RUN sh /usr/local/tomcat/bin/catalina.sh stop	
+	RUN sleep 30
+	RUN sh /usr/local/tomcat/bin/catalina.sh start
+5. Build image: docker build -t image .
+6. Now copy the grants.war and tomcat-users.xml into the directory where the Dockerfile is lying
+7. Spin a container: docker run -d -it -p 7777:8080 --name my_container1 manred123/testimage #!	/bin/bash
+                     docker run -d -it -p 6666:8080 --name my_container2 manred123/testimage #!	/bin/bash
+                     docker run -d -it -p 5555:8080 --name my_container3 manred123/testimage #!/bin/bash
+8. Enter the running container: sudo docker attach manred123/testimage or sudo docker exec -it container_id /bin/bash
+9. Create an image from the running container: sudo docker commit container_id desired_image_name:version_num
+10. To login to your docker hub: docker login and enter the username and password for your docker_hub account
+11. To pull image from dockerhub: docker pull user_name_of_docker_hub/image_name
+12. To push image from dockerhub: docker push user_name_of_docker_hub/image_name
+13. docker images: to display all the images on the server
+14. docker ps: to show all the running containers
+15. docker ps -a: to display all the containers
+16. docker rmi image_name: to delete an image from the server
+17. docker rm container_name: to delete a container from the server
+18. docker stop $(docker ps -a -q): to stop all the containers
+19. docker rm $(docker ps -a -q): to delete all the containers
+20. docker inspect container_name: to inspect the container
+21. while on a container we can detach from it without disturbing it by using Ctrl+p followed by Ctrl+q
+
+Command	Description
+docker attach	Attach to a running container
+docker build	Build an image from a Dockerfile
+docker checkpoint	Manage checkpoints
+docker commit	Create a new image from a container’s changes
+docker container	Manage containers
+docker cp	Copy files/folders between a container and the local filesystem
+docker create	Create a new container
+docker deploy	Deploy a new stack or update an existing stack
+docker diff	Inspect changes to files or directories on a container’s filesystem
+docker events	Get real time events from the server
+docker exec	Run a command in a running container
+docker export	Export a container’s filesystem as a tar archive
+docker history	Show the history of an image
+docker image	Manage images
+docker images	List images
+docker import	Import the contents from a tarball to create a filesystem image
+docker info	Display system-wide information
+docker inspect	Return low-level information on Docker objects
+docker kill	Kill one or more running containers
+docker load	Load an image from a tar archive or STDIN
+docker login	Log in to a Docker registry
+docker logout	Log out from a Docker registry
+docker logs	Fetch the logs of a container
+docker network	Manage networks
+docker node	Manage Swarm nodes
+docker pause	Pause all processes within one or more containers
+docker plugin	Manage plugins
+docker port	List port mappings or a specific mapping for the container
+docker ps	List containers
+docker pull	Pull an image or a repository from a registry
+docker push	Push an image or a repository to a registry
+docker rename	Rename a container
+docker restart	Restart one or more containers
+docker rm	Remove one or more containers
+docker rmi	Remove one or more images
+docker run	Run a command in a new container
+docker save	Save one or more images to a tar archive (streamed to STDOUT by default)
+docker search	Search the Docker Hub for images
+docker secret	Manage Docker secrets
+docker service	Manage services
+docker stack	Manage Docker stacks
+docker start	Start one or more stopped containers
+docker stats	Display a live stream of container(s) resource usage statistics
+docker stop	Stop one or more running containers
+docker swarm	Manage Swarm
+docker system	Manage Docker
+docker tag	Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+docker top	Display the running processes of a container
+docker unpause	Unpause all processes within one or more containers
+docker update	Update configuration of one or more containers
+docker version	Show the Docker version information
+docker volume	Manage volumes
+docker wait	Block until one or more containers stop, then print their exit codes
+
+
+chef node   ---- docker container
+cookbook    ---- images in registry
+recipe      ---- docker file
+
+To link two containers
+docker pull mysql	
+docker run --name mansql -e MYSQL_ROOT_PASSWORD=abc123 -d mysql:latest
+docker pull wordpress
+docker run --name manword --link mansql:mysql -p 8080:80 -d wordpress
+
+manword -container2
+mansql  - container1
+mysql - image1
+wordpress - image2
+
+now go to DNS:8080 in chrome to install wordpress
+
+
+
+docker run -d -p 4446:4444 --name selenium-hub -P selenium/hub
+docker run -d -P --name selenium-hub selenium/hub 
+above both are same
+
+
+docker run -d -P --link selenium-hub:hub selenium/node-chrome-debug 
+
+	EHS008940977
+
+Docker swarm
+
+Docker swarm is a cluster machine all running docker which provides scalable and reliable platform to run many containers
+Machines running docker are in the same subnet with ports 2377,4789 and 7946 open
+
+
+Docker disadvantages
+If main docker host goes down, all of your applications on conatiners goes down, typicaly you do production deployment, number of hosts running so--
+
+Docker pull jenkins
+docker run -d -it -p 7777:8080 --name jenkinscont jenkins
