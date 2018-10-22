@@ -135,3 +135,6 @@ If main docker host goes down, all of your applications on conatiners goes down,
 
 Docker pull jenkins
 docker run -d -it -p 7777:8080 --name jenkinscont jenkins
+
+docker save newimg:latest > newimg.tar
+docker load < newimg.tar
